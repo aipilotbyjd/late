@@ -1,39 +1,22 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
-
-Route::get('/login', function () {
-    return Inertia::render('auth/Login');
-})->name('login');
-
-Route::get('/register', function () {
-    return Inertia::render('auth/Register');
-})->name('register');
-
-Route::get('/forgot-password', function () {
-    return Inertia::render('auth/ForgotPassword');
-})->middleware('guest')->name('password.request');
-
-
-Route::get('/reset-password/{token}', function (Request $request, $token) {
-    return Inertia::render('ResetPassword', [
+Route::middleware('guest')->group(function () {
+    Route::get('/login', fn() => Inertia::render('auth/Login'))->name('login');
+    Route::get('/register', fn() => Inertia::render('auth/Register'))->name('register');
+    Route::get('/forgot-password', fn() => Inertia::render('auth/ForgotPassword'))->name('password.request');
+    Route::get('/reset-password/{token}', fn($token, Request $request) => Inertia::render('auth/ResetPassword', [
         'token' => $token,
         'email' => $request->email,
-    ]);
-})->middleware('guest')->name('password.reset');
+    ]))->name('password.reset');
+    Route::get('/two-factor-challenge', fn() => Inertia::render('auth/TwoFactorChallenge'))->name('two-factor.login');
+});
 
-Route::get('/email/verify', function () {
-    return Inertia::render('VerifyEmail');
-})->middleware(['auth'])->name('verification.notice');
-
-Route::get('/two-factor-challenge', function () {
-    return Inertia::render('TwoFactorChallenge');
-})->middleware(['guest'])->name('two-factor.login');
-
-
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', fn() => Inertia::render('auth/VerifyEmail'))->name('verification.notice');
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});

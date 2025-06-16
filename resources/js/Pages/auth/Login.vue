@@ -1,129 +1,74 @@
 <template>
-    <div
-        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-        <!-- Animated background -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div
-                class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
-            </div>
-            <div
-                class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000">
-            </div>
-            <div
-                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000">
-            </div>
-        </div>
-
-        <!-- Login Card -->
-        <Card class="relative w-full max-w-md bg-white/10 backdrop-blur-lg border-white/20 shadow-2xl">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-zinc-950 px-4">
+        <Card class="w-full max-w-md shadow-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
             <CardHeader class="text-center space-y-4">
-                <div
-                    class="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Lock class="w-8 h-8 text-white" />
-                </div>
-                <div class="space-y-2">
-                    <CardTitle class="text-3xl font-bold text-white">Welcome Back</CardTitle>
-                    <CardDescription class="text-gray-300">
-                        Sign in to your account to continue
-                    </CardDescription>
+                <Lock class="mx-auto w-10 h-10 text-purple-600 dark:text-purple-400" />
+                <div class="space-y-1">
+                    <CardTitle class="text-2xl font-semibold text-zinc-900 dark:text-white">Welcome Back</CardTitle>
+                    <CardDescription class="text-zinc-500 dark:text-zinc-400">Login to your account</CardDescription>
                 </div>
             </CardHeader>
 
             <CardContent class="space-y-6">
                 <form @submit="handleSubmit" class="space-y-4">
-                    <div class="space-y-4">
-                        <!-- Email Field -->
-                        <div class="space-y-2">
-                            <Label for="email" class="text-gray-200">Email Address</Label>
-                            <div class="relative">
-                                <Input id="email" v-model="form.email" type="email" placeholder="Enter your email"
-                                    required
-                                    class="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-400/50 pr-10" />
-                                <Mail class="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                            </div>
-                            <Alert v-if="form.errors.email" variant="destructive"
-                                class="bg-red-500/10 border-red-500/20">
-                                <AlertDescription class="text-red-400">
-                                    {{ form.errors.email }}
-                                </AlertDescription>
-                            </Alert>
-                        </div>
-
-                        <!-- Password Field -->
-                        <div class="space-y-2">
-                            <Label for="password" class="text-gray-200">Password</Label>
-                            <div class="relative">
-                                <Input id="password" v-model="form.password" :type="showPassword ? 'text' : 'password'"
-                                    placeholder="Enter your password" required
-                                    class="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-400/50 pr-10" />
-                                <Button type="button" variant="ghost" size="sm" @click="showPassword = !showPassword"
-                                    class="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400 hover:text-white">
-                                    <Eye v-if="showPassword" class="h-4 w-4" />
-                                    <EyeOff v-else class="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <Alert v-if="form.errors.password" variant="destructive"
-                                class="bg-red-500/10 border-red-500/20">
-                                <AlertDescription class="text-red-400">
-                                    {{ form.errors.password }}
-                                </AlertDescription>
-                            </Alert>
-                        </div>
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <Label for="email">Email</Label>
+                        <Input id="email" v-model="form.email" type="email" placeholder="you@example.com" required />
+                        <Alert v-if="form.errors.email" variant="destructive">
+                            <AlertDescription>{{ form.errors.email }}</AlertDescription>
+                        </Alert>
                     </div>
 
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <Checkbox id="remember" v-model="form.remember"
-                                class="border-white/20 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600" />
-                            <Label for="remember" class="text-sm text-gray-300">
-                                Remember me
-                            </Label>
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <Label for="password">Password</Label>
+                        <div class="relative">
+                            <Input id="password" :type="showPassword ? 'text' : 'password'" v-model="form.password"
+                                placeholder="••••••••" required />
+                            <button type="button" @click="showPassword = !showPassword"
+                                class="absolute right-3 top-2 text-zinc-500 hover:text-zinc-700 dark:hover:text-white">
+                                <Eye v-if="!showPassword" class="w-5 h-5" />
+                                <EyeOff v-else class="w-5 h-5" />
+                            </button>
                         </div>
-                        <Button variant="link" class="text-purple-400 hover:text-purple-300 p-0 h-auto">
+                        <Alert v-if="form.errors.password" variant="destructive">
+                            <AlertDescription>{{ form.errors.password }}</AlertDescription>
+                        </Alert>
+                    </div>
+
+                    <!-- Remember + Forgot -->
+                    <div class="flex justify-between items-center">
+                        <label class="flex items-center space-x-2">
+                            <Checkbox id="remember" v-model="form.remember" />
+                            <span class="text-sm text-zinc-600 dark:text-zinc-300">Remember me</span>
+                        </label>
+                        <Button variant="link" class="text-sm text-purple-600 dark:text-purple-400 px-0 h-auto"
+                            @click="$inertia.visit('/forgot-password')">
                             Forgot password?
                         </Button>
                     </div>
 
-                    <!-- Submit Button -->
-                    <Button type="submit" :disabled="form.processing"
-                        class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold transition-all duration-300 transform hover:scale-105 disabled:transform-none shadow-lg">
+                    <!-- Submit -->
+                    <Button type="submit" class="w-full" :disabled="form.processing">
                         <Loader2 v-if="form.processing" class="mr-2 h-4 w-4 animate-spin" />
                         {{ form.processing ? 'Signing in...' : 'Sign In' }}
                     </Button>
                 </form>
 
-                <!-- Divider -->
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <Separator class="w-full bg-white/20" />
-                    </div>
-                    <div class="relative flex justify-center text-xs uppercase">
-                        <span class="bg-transparent px-2 text-gray-400">Or continue with</span>
-                    </div>
-                </div>
+                <Separator />
 
-                <!-- Social Login -->
+                <!-- Social login -->
                 <div class="grid grid-cols-2 gap-4">
-                    <Button variant="outline"
-                        class="bg-white/5 border-white/20 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300 hover:scale-105">
-                        <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="currentColor"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="currentColor"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="currentColor"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                    <Button variant="outline">
+                        <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M..." /> <!-- Google icon path -->
                         </svg>
                         Google
                     </Button>
-                    <Button variant="outline"
-                        class="bg-white/5 border-white/20 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300 hover:scale-105">
-                        <svg class="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    <Button variant="outline">
+                        <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M..." /> <!-- Facebook icon path -->
                         </svg>
                         Facebook
                     </Button>
@@ -131,10 +76,11 @@
             </CardContent>
 
             <CardFooter class="justify-center">
-                <p class="text-gray-300 text-sm">
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     Don't have an account?
-                    <Button variant="link" class="text-purple-400 hover:text-purple-300 p-0 h-auto ml-1">
-                        Sign up now
+                    <Button variant="link" class="text-purple-600 dark:text-purple-400 px-1 h-auto"
+                        @click="$inertia.visit('/register')">
+                        Sign up
                     </Button>
                 </p>
             </CardFooter>
@@ -145,64 +91,27 @@
 <script setup>
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
+import { Lock, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
 
-// Form state
 const form = useForm({
     email: '',
     password: '',
-    remember: false
+    remember: false,
 })
 
-// UI state
 const showPassword = ref(false)
 
-// Form submission
 const handleSubmit = (e) => {
     e.preventDefault()
     form.post('/login', {
-        onFinish: () => {
-            form.reset('password')
-        }
+        onFinish: () => form.reset('password'),
     })
 }
 </script>
-
-<style scoped>
-@keyframes blob {
-    0% {
-        transform: translate(0px, 0px) scale(1);
-    }
-
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
-    }
-
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
-
-    100% {
-        transform: translate(0px, 0px) scale(1);
-    }
-}
-
-.animate-blob {
-    animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-    animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-    animation-delay: 4s;
-}
-</style>
