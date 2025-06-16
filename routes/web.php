@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\WorkflowController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,3 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', fn() => Inertia::render('auth/VerifyEmail'))->name('verification.notice');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
+
+Route::resource('workflows', WorkflowController::class);
+
