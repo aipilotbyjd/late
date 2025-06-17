@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -44,5 +46,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * The teams that the user belongs to.
+     */
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    /**
+     * The teams that the user owns.
+     */
+    public function ownedTeams(): HasMany
+    {
+        return $this->hasMany(Team::class, 'created_by');
+    }
+
+    /**
+     * The credentials that the user owns.
+     */
+    public function credentials(): HasMany
+    {
+        return $this->hasMany(Credential::class);
     }
 }
