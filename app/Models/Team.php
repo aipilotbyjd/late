@@ -47,4 +47,12 @@ class Team extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    /**
+     * The pending invitations for the team.
+     */
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
+    }
 }
