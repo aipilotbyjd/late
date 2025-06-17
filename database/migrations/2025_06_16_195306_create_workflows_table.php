@@ -12,10 +12,16 @@ return new class extends Migration {
     {
         Schema::create('workflows', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('project_id')->constrained();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['active', 'paused', 'draft']);
+            $table->json('workflow_json');
+            $table->enum('trigger_type', ['webhook', 'polling', 'schedule'])->nullable();
+            $table->string('webhook_token', 64)->unique()->nullable();
+            $table->boolean('is_public')->default(false);
+            $table->string('cron_expression')->nullable();
+            $table->timestamp('last_run_at')->nullable();
             $table->timestamps();
         });
     }

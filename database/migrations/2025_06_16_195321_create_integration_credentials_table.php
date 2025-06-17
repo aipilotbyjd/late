@@ -10,16 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('integration_credentials', function (Blueprint $table) {
+        Schema::create('credentials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('integration_id')->constrained()->onDelete('cascade');
-            $table->string('access_token')->nullable();
-            $table->string('refresh_token')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('project_id')->constrained();
+            $table->foreignId('integration_id')->constrained();
+            $table->string('name');
+            $table->enum('type', ['api_key', 'oauth2', 'basic']);
+            $table->json('credentials');
             $table->timestamp('expires_at')->nullable();
-            $table->string('api_key')->nullable();
-            $table->string('webhook_url')->nullable();
-            $table->json('meta')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('integration_credentials');
+        Schema::dropIfExists('credentials');
     }
 };

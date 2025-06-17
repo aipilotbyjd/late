@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create('workflow_runs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workflow_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['success', 'failed', 'running'])->default('running');
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
-            $table->json('log')->nullable();
+            $table->foreignId('workflow_id')->constrained();
+            $table->enum('status', ['running', 'success', 'failed', 'cancelled']);
+            $table->timestamp('started_at');
+            $table->timestamp('completed_at')->nullable();
+            $table->text('error_summary')->nullable();
             $table->timestamps();
         });
     }

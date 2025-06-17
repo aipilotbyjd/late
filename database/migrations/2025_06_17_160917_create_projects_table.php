@@ -4,20 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('workflow_nodes', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workflow_id')->constrained();
-            $table->string('node_id');
-            $table->enum('type', ['trigger', 'action', 'utility']);
-            $table->string('integration');
+            $table->foreignId('team_id')->constrained();
             $table->string('name');
-            $table->json('config');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('workflow_nodes');
+        Schema::dropIfExists('projects');
     }
 };
